@@ -11,8 +11,8 @@ pinMotorFLForwards=24
 pinMotorFLBackwards=26
 
 pinMotorBRSpeed = 8
-pinMotorBRForwards = 10
-pinMotorBRBackwards = 12
+pinMotorBRForwards = 12
+pinMotorBRBackwards = 10
 
 pinMotorBLSpeed = 19
 pinMotorBLForwards = 21
