@@ -5,15 +5,17 @@ import RPi.GPIO as GPIO
 import time              # Import the Time library
 import DalekV2Drive      # Import my 4 Motor controller
 import cwiid             # Import WiiMote code
-import argparse
+import argparse          # Import Argument Parser
+import scrollphat        # Import Scroll pHat code
 
 # Define Constants (Global Variables)
-speed = 50 # 0 is stopped, 100 is fastest
-rightspeed = 50 # 0 is stopped, 100 is fastest
-leftspeed = 50 # 0 is stopped, 100 is fastest
+speed = 50       # 0 is stopped, 100 is fastest
+rightspeed = 50  # 0 is stopped, 100 is fastest
+leftspeed = 50   # 0 is stopped, 100 is fastest
+maxspeed = 100   # Set full Power
+minspeed = 0     # Set min power  
 #TRIG = 40  # Set the Trigger pin
 #ECHO = 38  # Set the Echo pin
-#buttons = 0 # Button state
 
 #======================================================================
 # Reading single character by forcing stdin to raw mode
@@ -60,6 +62,8 @@ def setup():                  # Setup GPIO and Initalise Imports
 def setupwii():
     # Connect Wiimote
     print '\n\nPress & hold 1 + 2 on your Wii Remote now ...\n\n'
+    scrollphat.clear()         # Shutdown Scroll pHat
+    scrollphat.write_string("1+2")
 
     # Connect to the Wii Remote. If it times out
     # then quit.
@@ -75,6 +79,9 @@ def setupwii():
     wii.rumble = 1
     time.sleep(0.1)
     wii.rumble = 0
+    scrollphat.clear()         # Shutdown Scroll pHat
+    scrollphat.write_string("Gd")
+
     print '\nPress some buttons!\n'
     print 'Press PLUS and MINUS together to disconnect and quit.\n'
     
@@ -88,9 +95,12 @@ def setupwii():
     
 def destroy():    # Shutdown GPIO and Cleanup modules
     print "\n... Shutting Down...\n"
-    DalekV2Drive.stop()  # Make sure Bot is not moving when program exits
-    DalekV2Drive.cleanup()
-    GPIO.cleanup() # Release resource
+    scrollphat.clear()         # Shutdown Scroll pHat
+    scrollphat.write_string("Cls")
+    DalekV2Drive.stop()        # Make sure Bot is not moving when program exits
+    scrollphat.clear()         # Shutdown Scroll pHat    
+    DalekV2Drive.cleanup()     # Shutdown all motor control
+    GPIO.cleanup()             # Release GPIO resource
     
 # Service Subroutines    
 def getdistance(distance):
@@ -119,9 +129,11 @@ def getdistance(distance):
 
 def ObstacleCourse():
 
-    global speed               # Allow access to 'speed' constants
-    global rightspeed          # Allow access to 'rightspeed' constants
-    global leftspeed           # Allow access to 'leftspeed' constants
+    global speed               # Allow access to 'speed' constant
+    global rightspeed          # Allow access to 'rightspeed' constant
+    global leftspeed           # Allow access to 'leftspeed' constant
+    global maxspeed            # Allow access to 'maxspeed' constant
+    global minspeed            # Allow access to 'minspeed' constant
     global wii                 # Allow access to 'Wii' constants
 
     wii.rpt_mode = cwiid.RPT_BTN
@@ -144,39 +156,68 @@ def ObstacleCourse():
             exit(wii)  
 
         print speed
+        scrollphat.clear()         # Shutdown Scroll pHat
+        scrollphat.write_string(str(speed))
             
         if keyp == 'w' or ord(keyp) == 16 or (buttons & cwiid.BTN_UP):
             print 'Forward', speed
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Fw")
             DalekV2Drive.forward(speed)
+            time.sleep(.25)
         elif keyp == 'z' or ord(keyp) == 17 or (buttons & cwiid.BTN_DOWN):
             print 'Backward', speed
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Bw")
             DalekV2Drive.backward(speed)
+            time.sleep(.25)
         elif keyp == 'n' or ord(keyp) == 19 or (buttons & cwiid.BTN_LEFT):
             print 'Spin Left', speed
-            DalekV2Drive.spinLeft(speed)
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("SL")
+            DalekV2Drive.spinLeft(maxspeed)
+            time.sleep(.25)
         elif keyp == 'm' or ord(keyp) == 19 or (buttons & cwiid.BTN_RIGHT):
             print 'Spin Right', speed
-            DalekV2Drive.spinRight(speed)
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("SR")
+            DalekV2Drive.spinRight(maxspeed)
+            time.sleep(.25)
         elif keyp == 's' or ord(keyp) == 18 or (buttons & cwiid.BTN_1):
             print '1'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("1")
             #Fight()
+            time.sleep(.25)
         elif keyp == 'a' or ord(keyp) == 19 or (buttons & cwiid.BTN_2):
             print '2'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("2")
             #NotAssigned()
+            time.sleep(.25)
         elif keyp == '.' or keyp == '>' or (buttons & cwiid.BTN_PLUS):
             print 'Speed Up 1'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("+1")
             if speed < 100:
                 speed = speed + 1
                 time.sleep(0.5)
         elif keyp == ',' or keyp == '<' or (buttons & cwiid.BTN_MINUS):
             print 'Speed Down 1'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("-1")
             if speed > 0:
                 speed = speed - 1
                 time.sleep(0.5)
         elif keyp == ' ' or (buttons & cwiid.BTN_A):
             print 'Stop'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Stp")
             DalekV2Drive.stop()
+            time.sleep(.25)
         elif keyp == ' ' or (buttons & cwiid.BTN_HOME):
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Hm")
             print "\n\nReturning to Main Menu\n\n"
             time.sleep(2)
             break
@@ -214,6 +255,9 @@ def mainloop():            # Main Program Loop
         # Choose which task to do
         #keyp = readkey()  # For Keyboard control
         keyp = '0'         # Dummy to stop errors
+
+        scrollphat.clear()         # Shutdown Scroll pHat
+        scrollphat.write_string("Mn")   # Show we are on main menu
         
         # If Plus and Minus buttons pressed
         # together then rumble and quit.
@@ -223,39 +267,55 @@ def mainloop():            # Main Program Loop
             time.sleep(1)
             wii.rumble = 0
             exit(wii)  
-          
         if keyp == 'w' or ord(keyp) == 16 or (buttons & cwiid.BTN_UP):
             print 'ObstacleCourse'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("OC")
             ObstacleCourse()
         elif keyp == 'z' or ord(keyp) == 17 or (buttons & cwiid.BTN_DOWN):
             print 'StreightLine'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("StL")
             #StreightLine()
         elif keyp == 'n' or ord(keyp) == 19 or (buttons & cwiid.BTN_LEFT):
             print 'MinimalMaze'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("MM")
             #MinimalMaze()
         elif keyp == 'm' or ord(keyp) == 19 or (buttons & cwiid.BTN_RIGHT):
             print 'Golf'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Golf")
             #ObstacleCourse()
         elif keyp == 's' or ord(keyp) == 18 or (buttons & cwiid.BTN_1):
             print 'Fight'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Fit")
             #Fight()
         elif keyp == 'a' or ord(keyp) == 19 or (buttons & cwiid.BTN_2):
-            print 'Not Assigned'
+            print '2'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("2")
             #NotAssigned()
         elif keyp == '.' or keyp == '>' or (buttons & cwiid.BTN_PLUS):
-            print 'Not Assigned'
+            print '+'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("+")
             #NotAssigned()
         elif keyp == ',' or keyp == '<' or (buttons & cwiid.BTN_MINUS):
-            print 'Not Assigned'
+            print '-'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("-")
             #NotAssigned()
-        elif keyp == ' ' or (buttons & cwiid.BTN_HOME) or (buttons & cwiid.BTN_A):
-            print 'Not Assigned'
+        elif keyp == ' ' or (buttons & cwiid.BTN_HOME): #or (buttons & cwiid.BTN_A):
+            print 'Exit'
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Ext")
             #NotAssigned()
-        elif ord(keyp) == 3:
             break
 
         DalekV2Drive.stop()
-        
+       
        
 if __name__ == '__main__': # The Program will start from here
         
@@ -264,6 +324,7 @@ if __name__ == '__main__': # The Program will start from here
     parser.add_argument('-r',dest='RightSpeed', type=float, help='Initial speed of Right motors')   # Initial speed of Right Motors
     parser.add_argument('-l',dest='LeftSpeed', type=float, help='Initial speed of Left Motors')     # Initial speed of Left Motors
     parser.add_argument('-s',dest='Speed', type=float, help='Initial General speed of Motors')      # Initial General speed of Motors
+    parser.add_argument('-b',dest='Bright', type=float, help='Brightness of scrollpHat')            # Brightness of scrollpHat
     args = parser.parse_args()
     
     if ((str(args.RightSpeed)) != 'None'):
@@ -277,12 +338,20 @@ if __name__ == '__main__': # The Program will start from here
     if ((str(args.Speed)) != 'None'):
         print '\nGeneral Speed - ',(str(args.Speed))
         speed = args.Speed
-        
     
+    if ((str(args.Bright)) != 'None'):
+        print '\nscrollpHat Brightness - ',(str(args.Bright))
+        scrollphat.set_brightness(int(args.Bright))
+ 
     print '\n\nSetting Up ...\n'
-    setup()
+    scrollphat.clear()         # Shutdown Scroll pHat
+    scrollphat.write_string("Wat")
+
+    setup()           # Setup all motors and Wii
 
     print '\nGo ...\n\n'
+    scrollphat.clear()         # Shutdown Scroll pHat
+    scrollphat.write_string("Go")
 	
     try:
         mainloop()    # Call main loop

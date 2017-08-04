@@ -153,15 +153,15 @@ def turnForward(leftSpeed, rightSpeed):
     pwmMotorFRSpeed.ChangeDutyCycle(rightSpeed)
     GPIO.output(pinMotorFRForwards, GPIO.HIGH)
     GPIO.output(pinMotorFRBackwards, GPIO.LOW)
-    
-    pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
-    GPIO.output(pinMotorFLForwards, GPIO.HIGH)
-    GPIO.output(pinMotorFLBackwards, GPIO.LOW)
-	
+
     pwmMotorBRSpeed.ChangeDutyCycle(rightSpeed)
     GPIO.output(pinMotorBRForwards, GPIO.HIGH)
     GPIO.output(pinMotorBRBackwards, GPIO.LOW)
     
+    pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
+    GPIO.output(pinMotorFLForwards, GPIO.HIGH)
+    GPIO.output(pinMotorFLBackwards, GPIO.LOW)
+   
     pwmMotorBLSpeed.ChangeDutyCycle(leftSpeed)
     GPIO.output(pinMotorBLForwards, GPIO.HIGH)
     GPIO.output(pinMotorBLBackwards, GPIO.LOW)
@@ -171,14 +171,14 @@ def turnBackward(leftSpeed, rightSpeed):
     pwmMotorFRSpeed.ChangeDutyCycle(rightSpeed)
     GPIO.output(pinMotorFRForwards, GPIO.LOW)
     GPIO.output(pinMotorFRBackwards, GPIO.HIGH)
-    
-    pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
-    GPIO.output(pinMotorFLForwards, GPIO.LOW)
-    GPIO.output(pinMotorFLBackwards, GPIO.HIGH)
-	
+
     pwmMotorBRSpeed.ChangeDutyCycle(rightSpeed)
     GPIO.output(pinMotorBRForwards, GPIO.LOW)
     GPIO.output(pinMotorBRBackwards, GPIO.HIGH)
+
+    pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
+    GPIO.output(pinMotorFLForwards, GPIO.LOW)
+    GPIO.output(pinMotorFLBackwards, GPIO.HIGH)
     
     pwmMotorBLSpeed.ChangeDutyCycle(leftSpeed)
     GPIO.output(pinMotorBLForwards, GPIO.LOW)
@@ -189,36 +189,37 @@ def spinLeft(Speed):
     pwmMotorFRSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorFRForwards, GPIO.HIGH)
     GPIO.output(pinMotorFRBackwards, GPIO.LOW)
-    
-    pwmMotorFLSpeed.ChangeDutyCycle(Speed)
-    GPIO.output(pinMotorFLForwards, GPIO.LOW)
-    GPIO.output(pinMotorFLBackwards, GPIO.HIGH)
-	
+
     pwmMotorBRSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorBRForwards, GPIO.HIGH)
     GPIO.output(pinMotorBRBackwards, GPIO.LOW)
     
+    pwmMotorFLSpeed.ChangeDutyCycle(Speed)
+    GPIO.output(pinMotorFLForwards, GPIO.LOW)
+    GPIO.output(pinMotorFLBackwards, GPIO.HIGH)
+   
     pwmMotorBLSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorBLForwards, GPIO.LOW)
     GPIO.output(pinMotorBLBackwards, GPIO.HIGH)
 
 # spinRight(speed): Sets motors to turn opposite directions at speed. 0 <= speed <= 100
 def spinRight(Speed):
-    pwmMotorFRSpeed.ChangeDutyCycle(Speed)
-    GPIO.output(pinMotorFRForwards, GPIO.LOW)
-    GPIO.output(pinMotorFRBackwards, GPIO.HIGH)
-    
     pwmMotorFLSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorFLForwards, GPIO.HIGH)
     GPIO.output(pinMotorFLBackwards, GPIO.LOW)
+
+    pwmMotorBLSpeed.ChangeDutyCycle(Speed)
+    GPIO.output(pinMotorBLForwards, GPIO.HIGH)
+    GPIO.output(pinMotorBLBackwards, GPIO.LOW)
+
+    pwmMotorFRSpeed.ChangeDutyCycle(Speed)
+    GPIO.output(pinMotorFRForwards, GPIO.LOW)
+    GPIO.output(pinMotorFRBackwards, GPIO.HIGH)
 	
     pwmMotorBRSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorBRForwards, GPIO.LOW)
     GPIO.output(pinMotorBRBackwards, GPIO.HIGH)
     
-    pwmMotorBLSpeed.ChangeDutyCycle(Speed)
-    GPIO.output(pinMotorBLForwards, GPIO.HIGH)
-    GPIO.output(pinMotorBLBackwards, GPIO.LOW)
     
 # End of Motor Functions
 #======================================================================	
@@ -266,3 +267,18 @@ def BLB(Speed):
     pwmMotorBLSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorBLForwards, GPIO.LOW)
     GPIO.output(pinMotorBLBackwards, GPIO.HIGH)
+
+# End of Test Functions
+#======================================================================	
+
+#======================================================================	
+# __main__ Code
+#======================================================================	   
+    
+if __name__ == "__main__":
+    print("This cannot be run directly. It is intended to be imported")
+else:
+    print("Importing DalekV2Drive.py")
+    
+# End of __main__ Code
+#======================================================================	
