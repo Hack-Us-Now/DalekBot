@@ -147,16 +147,19 @@ def backward(Speed):
     pwmMotorBLSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorBLForwards, GPIO.LOW)
     GPIO.output(pinMotorBLBackwards, GPIO.HIGH)
-	
-# turnForward(leftSpeed, rightSpeed): Moves forwards in an arc by setting different speeds. 0 <= leftSpeed,rightSpeed <= 100
-def turnForward(leftSpeed, rightSpeed):
+
+# The theory for the next 4 is that by setting the inside wheels backward and putting a small value there it will 
+# act like a braake and cause the Bot to turn rather than just spinning.
+    
+# turnForwardRight(leftSpeed, rightSpeed): Moves forwards in an arc by setting Left forward and Right backward
+def turnForwardRight(leftSpeed, rightSpeed):
     pwmMotorFRSpeed.ChangeDutyCycle(rightSpeed)
-    GPIO.output(pinMotorFRForwards, GPIO.HIGH)
-    GPIO.output(pinMotorFRBackwards, GPIO.LOW)
+    GPIO.output(pinMotorFRForwards, GPIO.LOW)
+    GPIO.output(pinMotorFRBackwards, GPIO.HIGH)
 
     pwmMotorBRSpeed.ChangeDutyCycle(rightSpeed)
-    GPIO.output(pinMotorBRForwards, GPIO.HIGH)
-    GPIO.output(pinMotorBRBackwards, GPIO.LOW)
+    GPIO.output(pinMotorBRForwards, GPIO.LOW)
+    GPIO.output(pinMotorBRBackwards, GPIO.HIGH)
     
     pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
     GPIO.output(pinMotorFLForwards, GPIO.HIGH)
@@ -166,8 +169,44 @@ def turnForward(leftSpeed, rightSpeed):
     GPIO.output(pinMotorBLForwards, GPIO.HIGH)
     GPIO.output(pinMotorBLBackwards, GPIO.LOW)
     
-# turnBackward(leftSpeed, rightSpeed): Moves backwards in an arc by setting different speeds. 0 <= leftSpeed,rightSpeed <= 100
-def turnBackward(leftSpeed, rightSpeed):
+# turnForwardLeft(leftSpeed, rightSpeed): Moves forwards in an arc by setting Left backward and Right forward
+def turnForwardLeft(leftSpeed, rightSpeed):
+    pwmMotorFRSpeed.ChangeDutyCycle(rightSpeed)
+    GPIO.output(pinMotorFRForwards, GPIO.HIGH)
+    GPIO.output(pinMotorFRBackwards, GPIO.LOW)
+
+    pwmMotorBRSpeed.ChangeDutyCycle(rightSpeed)
+    GPIO.output(pinMotorBRForwards, GPIO.HIGH)
+    GPIO.output(pinMotorBRBackwards, GPIO.LOW)
+
+    pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
+    GPIO.output(pinMotorFLForwards, GPIO.LOW)
+    GPIO.output(pinMotorFLBackwards, GPIO.HIGH)
+    
+    pwmMotorBLSpeed.ChangeDutyCycle(leftSpeed)
+    GPIO.output(pinMotorBLForwards, GPIO.LOW)
+    GPIO.output(pinMotorBLBackwards, GPIO.HIGH)
+	
+# turnBackwardRight(leftSpeed, rightSpeed): Moves backward in an arc by setting Right forward and left backward
+def turnBackwardRight(leftSpeed, rightSpeed):
+    pwmMotorFRSpeed.ChangeDutyCycle(rightSpeed)
+    GPIO.output(pinMotorFRForwards, GPIO.LOW)
+    GPIO.output(pinMotorFRBackwards, GPIO.HIGH)
+
+    pwmMotorBRSpeed.ChangeDutyCycle(rightSpeed)
+    GPIO.output(pinMotorBRForwards, GPIO.LOW)
+    GPIO.output(pinMotorBRBackwards, GPIO.HIGH)
+    
+    pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
+    GPIO.output(pinMotorFLForwards, GPIO.HIGH)
+    GPIO.output(pinMotorFLBackwards, GPIO.LOW)
+   
+    pwmMotorBLSpeed.ChangeDutyCycle(leftSpeed)
+    GPIO.output(pinMotorBLForwards, GPIO.HIGH)
+    GPIO.output(pinMotorBLBackwards, GPIO.LOW)
+    
+# turnBackwardLeft(leftSpeed, rightSpeed): Moves backward in an arc by setting Right backward and left forward
+def turnBackwardLeft(leftSpeed, rightSpeed):
     pwmMotorFRSpeed.ChangeDutyCycle(rightSpeed)
     GPIO.output(pinMotorFRForwards, GPIO.LOW)
     GPIO.output(pinMotorFRBackwards, GPIO.HIGH)
@@ -177,12 +216,12 @@ def turnBackward(leftSpeed, rightSpeed):
     GPIO.output(pinMotorBRBackwards, GPIO.HIGH)
 
     pwmMotorFLSpeed.ChangeDutyCycle(leftSpeed)
-    GPIO.output(pinMotorFLForwards, GPIO.LOW)
-    GPIO.output(pinMotorFLBackwards, GPIO.HIGH)
+    GPIO.output(pinMotorFLForwards, GPIO.HIGH)
+    GPIO.output(pinMotorFLBackwards, GPIO.LOW)
     
     pwmMotorBLSpeed.ChangeDutyCycle(leftSpeed)
-    GPIO.output(pinMotorBLForwards, GPIO.LOW)
-    GPIO.output(pinMotorBLBackwards, GPIO.HIGH)
+    GPIO.output(pinMotorBLForwards, GPIO.HIGH)
+    GPIO.output(pinMotorBLBackwards, GPIO.LOW)
 
 # spinLeft(speed): Sets motors to turn opposite directions at speed. 0 <= speed <= 100
 def spinLeft(Speed):

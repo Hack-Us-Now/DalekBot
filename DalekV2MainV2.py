@@ -9,11 +9,13 @@ import argparse          # Import Argument Parser
 import scrollphat        # Import Scroll pHat code
 
 # Define Constants (Global Variables)
-speed = 50       # 0 is stopped, 100 is fastest
-rightspeed = 50  # 0 is stopped, 100 is fastest
-leftspeed = 50   # 0 is stopped, 100 is fastest
-maxspeed = 100   # Set full Power
-minspeed = 0     # Set min power  
+speed = 50               # 0 is stopped, 100 is fastest
+rightspeed = 50          # 0 is stopped, 100 is fastest
+leftspeed = 50           # 0 is stopped, 100 is fastest
+maxspeed = 100           # Set full Power
+minspeed = 0             # Set min power  
+innerturnspeed = 40      # Speed for Inner Wheels in a turn
+outerturnspeed = 80      # Speed for Outer Wheels in a turn
 #TRIG = 40  # Set the Trigger pin
 #ECHO = 38  # Set the Echo pin
 
@@ -135,6 +137,8 @@ def ObstacleCourse():
     global maxspeed            # Allow access to 'maxspeed' constant
     global minspeed            # Allow access to 'minspeed' constant
     global wii                 # Allow access to 'Wii' constants
+    global innerturnspeed      # Speed for Inner Wheels in a turn
+    global outerturnspeed      # Speed for Outer Wheels in a turn
 
     wii.rpt_mode = cwiid.RPT_BTN
     
@@ -184,16 +188,16 @@ def ObstacleCourse():
             DalekV2Drive.spinRight(maxspeed)
             time.sleep(.25)
         elif keyp == 's' or ord(keyp) == 18 or (buttons & cwiid.BTN_1):
-            print '1'
+            print 'Turn Right'
             scrollphat.clear()         # Shutdown Scroll pHat
-            scrollphat.write_string("1")
-            #Fight()
+            scrollphat.write_string("TrR")
+            DalekV2Drive.turnForwardRight(outerturnspeed, innerturnspeed)
             time.sleep(.25)
         elif keyp == 'a' or ord(keyp) == 19 or (buttons & cwiid.BTN_2):
-            print '2'
+            print 'Turn Left'
             scrollphat.clear()         # Shutdown Scroll pHat
-            scrollphat.write_string("2")
-            #NotAssigned()
+            scrollphat.write_string("TrL")
+            DalekV2Drive.turnForwardLeft(innerturnspeed, outerturnspeed)
             time.sleep(.25)
         elif keyp == '.' or keyp == '>' or (buttons & cwiid.BTN_PLUS):
             print 'Speed Up 1'
@@ -239,9 +243,9 @@ def ObstacleCourse():
     
 def mainloop():            # Main Program Loop
 
-    global speed               # Allow access to 'speed' constants
-    global rightspeed          # Allow access to 'rightspeed' constants
-    global leftspeed           # Allow access to 'leftspeed' constants
+    #global speed               # Allow access to 'speed' constants
+    #global rightspeed          # Allow access to 'rightspeed' constants
+    #global leftspeed           # Allow access to 'leftspeed' constants
     global wii                 # Allow access to 'Wii' constants
 
     #print 'Speed...' + str(speed) + '...LeftSpeed...' + str(leftspeed) + '...Right Speed...' + str(rightspeed)
@@ -331,10 +335,12 @@ if __name__ == '__main__': # The Program will start from here
         
     # Get and parse Arguments
     parser = argparse.ArgumentParser(description='Dalek Motor Control Test Program')
-    parser.add_argument('-r',dest='RightSpeed', type=float, help='Initial speed of Right motors')   # Initial speed of Right Motors
-    parser.add_argument('-l',dest='LeftSpeed', type=float, help='Initial speed of Left Motors')     # Initial speed of Left Motors
-    parser.add_argument('-s',dest='Speed', type=float, help='Initial General speed of Motors')      # Initial General speed of Motors
-    parser.add_argument('-b',dest='Bright', type=float, help='Brightness of scrollpHat')            # Brightness of scrollpHat
+    parser.add_argument('-r',dest='RightSpeed', type=float, help='Initial speed of Right motors')       # Initial speed of Right Motors
+    parser.add_argument('-l',dest='LeftSpeed', type=float, help='Initial speed of Left Motors')         # Initial speed of Left Motors
+    parser.add_argument('-s',dest='Speed', type=float, help='Initial General speed of Motors')          # Initial General speed of Motors
+    parser.add_argument('-b',dest='Bright', type=float, help='Brightness of scrollpHat')                # Brightness of scrollpHat
+    parser.add_argument('-i',dest='InnerTurnSpeed', type=float, help='Speed of Inner wheels in a turn') # Speed of Inner wheels in a turn
+    parser.add_argument('-o',dest='OuterTurnSpeed', type=float, help='Speed of Inner wheels in a turn') # Speed of Outer wheels in a turn
     args = parser.parse_args()
     
     if ((str(args.RightSpeed)) != 'None'):
@@ -352,7 +358,15 @@ if __name__ == '__main__': # The Program will start from here
     if ((str(args.Bright)) != 'None'):
         print '\nscrollpHat Brightness - ',(str(args.Bright))
         scrollphat.set_brightness(int(args.Bright))
- 
+
+    if ((str(args.InnerTurnSpeed)) != 'None'):
+        print '\nInner Turn Speed - ',(str(args.InnerTurnSpeed))
+        innerturnspeed = args.InnerTurnSpeed
+    
+    if ((str(args.OuterTurnSpeed)) != 'None'):
+        print '\nOuter Turn Speed - ',(str(args.OuterTurnSpeed))
+        outerturnspeed = args.OuterTurnSpeed
+        
     print '\n\nSetting Up ...\n'
     scrollphat.clear()         # Clear Scroll pHat
     scrollphat.write_string("Set")
