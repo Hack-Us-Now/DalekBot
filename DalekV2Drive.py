@@ -267,3 +267,18 @@ def BLB(Speed):
     pwmMotorBLSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorBLForwards, GPIO.LOW)
     GPIO.output(pinMotorBLBackwards, GPIO.HIGH)
+   
+# End of Test Functions
+#======================================================================	
+
+#======================================================================	
+# __main__ Code
+#======================================================================	   
+    
+if __name__ == "__main__":
+    print("This cannot be run directly. It is intended to be imported")
+else:
+    print("Importing DalekV2Drive.py")
+    
+# End of __main__ Code
+#======================================================================
