@@ -220,8 +220,14 @@ def ObstacleCourse():
             scrollphat.write_string("Hm")
             print "\n\nReturning to Main Menu\n\n"
             time.sleep(2)
+            print "Main Menu"               # Show we are on main menu
+            print '\nUp    - ObstacleCourse'
+            print 'Down  - StreightLine'
+            print 'Left  - MinimaMaze'
+            print 'Right - Golf'
+            print '1     - Fight\n'
+            print "Ready"
             break
-
     
 #def StreightLine():
     
@@ -239,6 +245,10 @@ def mainloop():            # Main Program Loop
     global wii                 # Allow access to 'Wii' constants
 
     #print 'Speed...' + str(speed) + '...LeftSpeed...' + str(leftspeed) + '...Right Speed...' + str(rightspeed)
+    
+    scrollphat.clear()              # Clear Scroll pHat
+    scrollphat.write_string("Mn")   # Show we are on main menu
+    print "Main Menu"               # Show we are on main menu
 
     print '\nUp    - ObstacleCourse'
     print 'Down  - StreightLine'
@@ -250,15 +260,15 @@ def mainloop():            # Main Program Loop
 
     time.sleep(2)
     
+    print "Ready"
+    
     while True:
         buttons = wii.state['buttons']          # Get WiiMote Button Pressed
         # Choose which task to do
         #keyp = readkey()  # For Keyboard control
         keyp = '0'         # Dummy to stop errors
 
-        scrollphat.clear()         # Shutdown Scroll pHat
-        scrollphat.write_string("Mn")   # Show we are on main menu
-        
+     
         # If Plus and Minus buttons pressed
         # together then rumble and quit.
         if (buttons - cwiid.BTN_PLUS - cwiid.BTN_MINUS == 0):  
@@ -269,47 +279,47 @@ def mainloop():            # Main Program Loop
             exit(wii)  
         if keyp == 'w' or ord(keyp) == 16 or (buttons & cwiid.BTN_UP):
             print 'ObstacleCourse'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("OC")
             ObstacleCourse()
         elif keyp == 'z' or ord(keyp) == 17 or (buttons & cwiid.BTN_DOWN):
             print 'StreightLine'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("StL")
             #StreightLine()
         elif keyp == 'n' or ord(keyp) == 19 or (buttons & cwiid.BTN_LEFT):
             print 'MinimalMaze'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("MM")
             #MinimalMaze()
         elif keyp == 'm' or ord(keyp) == 19 or (buttons & cwiid.BTN_RIGHT):
             print 'Golf'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("Golf")
             #ObstacleCourse()
         elif keyp == 's' or ord(keyp) == 18 or (buttons & cwiid.BTN_1):
             print 'Fight'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("Fit")
             #Fight()
         elif keyp == 'a' or ord(keyp) == 19 or (buttons & cwiid.BTN_2):
             print '2'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("2")
             #NotAssigned()
         elif keyp == '.' or keyp == '>' or (buttons & cwiid.BTN_PLUS):
             print '+'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("+")
             #NotAssigned()
         elif keyp == ',' or keyp == '<' or (buttons & cwiid.BTN_MINUS):
             print '-'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("-")
             #NotAssigned()
         elif keyp == ' ' or (buttons & cwiid.BTN_HOME): #or (buttons & cwiid.BTN_A):
             print 'Exit'
-            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.clear()         # Clear Scroll pHat
             scrollphat.write_string("Ext")
             #NotAssigned()
             break
@@ -344,19 +354,21 @@ if __name__ == '__main__': # The Program will start from here
         scrollphat.set_brightness(int(args.Bright))
  
     print '\n\nSetting Up ...\n'
-    scrollphat.clear()         # Shutdown Scroll pHat
-    scrollphat.write_string("Wat")
+    scrollphat.clear()         # Clear Scroll pHat
+    scrollphat.write_string("Set")
 
     setup()           # Setup all motors and Wii
 
     print '\nGo ...\n\n'
-    scrollphat.clear()         # Shutdown Scroll pHat
+    scrollphat.clear()         # Clear Scroll pHat
     scrollphat.write_string("Go")
 	
     try:
         mainloop()    # Call main loop
         destroy()     # Shutdown
-        sys.exit(-1) # Exit Cleanly
+        print "\n\n................... Exit .......................\n\n"
+        sys.exit(0) # Exit Cleanly
     except KeyboardInterrupt:
         destroy()
-        sys.exit(-1) # Exit Cleanly
+        print "\n\n................... Exit .......................\n\n"
+        sys.exit(0) # Exit Cleanly

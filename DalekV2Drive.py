@@ -3,20 +3,20 @@ import RPi.GPIO as GPIO # Import the GPIO Library
 # Set variables for the GPIO motor pins
 # print '\n\nSet variables for the GPIO motor pins'
 pinMotorFRSpeed=11
-pinMotorFRForwards=13
-pinMotorFRBackwards=15
+pinMotorFRForwards=15
+pinMotorFRBackwards=13
 
 pinMotorFLSpeed=22
-pinMotorFLForwards=24
-pinMotorFLBackwards=26
+pinMotorFLForwards=26
+pinMotorFLBackwards=24
 
 pinMotorBRSpeed = 8
-pinMotorBRForwards = 12
-pinMotorBRBackwards = 10
+pinMotorBRForwards = 10
+pinMotorBRBackwards = 12
 
 pinMotorBLSpeed = 19
-pinMotorBLForwards = 21
-pinMotorBLBackwards = 23
+pinMotorBLForwards = 23
+pinMotorBLBackwards = 21
 
 #======================================================================
 # General Functions
@@ -267,18 +267,3 @@ def BLB(Speed):
     pwmMotorBLSpeed.ChangeDutyCycle(Speed)
     GPIO.output(pinMotorBLForwards, GPIO.LOW)
     GPIO.output(pinMotorBLBackwards, GPIO.HIGH)
-
-# End of Test Functions
-#======================================================================	
-
-#======================================================================	
-# __main__ Code
-#======================================================================	   
-    
-if __name__ == "__main__":
-    print("This cannot be run directly. It is intended to be imported")
-else:
-    print("Importing DalekV2Drive.py")
-    
-# End of __main__ Code
-#======================================================================	
