@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-# Minor change so I can show issue to github
-
 # Module Imports
 import RPi.GPIO as GPIO
 import time              # Import the Time library
