@@ -60,7 +60,7 @@ def setup():                  # Setup GPIO and Initalise Imports
     connected = False
     while connected == False:
         connected = setupwii()                # Setup and connect to WiiMote
-   
+  
 def setupwii():
     # Connect Wiimote
     print '\n\nPress & hold 1 + 2 on your Wii Remote now ...\n\n'
@@ -75,12 +75,39 @@ def setupwii():
         wii=cwiid.Wiimote()
     except RuntimeError:
         print 'Error opening wiimote connection'
+        scrollphat.clear()         # Shutdown Scroll pHat
+        scrollphat.write_string("Err")
+        time.sleep(0.5)
         return False
 
     print 'Wii Remote connected...\n'
     wii.rumble = 1
     time.sleep(0.1)
     wii.rumble = 0
+    
+    wii.led = 1
+    time.sleep(0.75) 
+    wii.led = 2
+    time.sleep(0.75)
+    wii.led = 4
+    time.sleep(0.75)
+    wii.led = 8
+    time.sleep(0.75)
+    battery = int(wii.state['battery']/25)
+    
+    if battery == 4:
+        wii.led = 8
+    elif battery == 3:
+        wii.led = 4
+    elif battery == 2:
+        wii.led = 2
+    else: 
+        wii.led = 1
+    
+    wii.rumble = 1
+    time.sleep(0.1)
+    wii.rumble = 0
+    
     scrollphat.clear()         # Shutdown Scroll pHat
     scrollphat.write_string("Gd")
 
@@ -94,7 +121,7 @@ def setupwii():
     print 'Press Ctrl-C to end\n'
 
     return True
-    
+  
 def destroy():    # Shutdown GPIO and Cleanup modules
     print "\n... Shutting Down...\n"
     scrollphat.clear()         # Shutdown Scroll pHat
@@ -104,7 +131,7 @@ def destroy():    # Shutdown GPIO and Cleanup modules
     DalekV2Drive.cleanup()     # Shutdown all motor control
     GPIO.cleanup()             # Release GPIO resource
     
-# Service Subroutines    
+#   Service Subroutines    
 def getdistance(distance):
     GPIO.output(TRIG, False)
     print "Waiting For Sensor To Settle"
@@ -143,12 +170,14 @@ def ObstacleCourse():
     wii.rpt_mode = cwiid.RPT_BTN
     
     time.sleep(2)
+    
+    boost = 0                   # Turn boost off
 
     while True:
         buttons = wii.state['buttons']          # Get WiiMote Button Pressed
         # Choose which task to do
-        #keyp = readkey()  # For Keyboard control
-        keyp = '0'         # Dummy to stop errors
+        #keyp = readkey()                       # For Keyboard control
+        keyp = '0'                              # Dummy to stop errors
         
         # If Plus and Minus buttons pressed
         # together then rumble and quit.
@@ -162,7 +191,23 @@ def ObstacleCourse():
         print speed
         scrollphat.clear()         # Shutdown Scroll pHat
         scrollphat.write_string(str(speed))
-            
+        
+        if boost == 0 and (buttons & cwiid.BTN_B):
+            print 'Boost', maxspeed
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Max")
+            savespeed = speed
+            speed = maxspeed
+            boost = 1
+            time.sleep(.25)
+        elif boost == 1 and (buttons & cwiid.BTN_B):
+            speed = savespeed
+            boost = 0
+            print 'Normal', speed
+            scrollphat.clear()         # Shutdown Scroll pHat
+            scrollphat.write_string("Nor")
+            time.sleep(.25)
+        
         if keyp == 'w' or ord(keyp) == 16 or (buttons & cwiid.BTN_UP):
             print 'Forward', speed
             scrollphat.clear()         # Shutdown Scroll pHat
