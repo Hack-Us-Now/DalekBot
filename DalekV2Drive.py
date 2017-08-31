@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import RPi.GPIO as GPIO # Import the GPIO Library
 
 # Set variables for the GPIO motor pins
