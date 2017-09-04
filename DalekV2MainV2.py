@@ -368,6 +368,8 @@ def LineFollowWebCam(showcam):
     global video_capture       # Allow Access to WebCam Object
     
     cx = 300                   # Go Streight
+    turnspeed = 95
+    speed = 30
     
     print'\nPress "A" to start Line following'
     print'Press "Hm" to return to main menu\n'
@@ -389,6 +391,7 @@ def LineFollowWebCam(showcam):
             scrollphat.write_string('LiF')
             time.sleep(.25)
             cx = 300                   # Go Streight
+            
             while True:
             
                 buttons = wii.state['buttons']          # Get WiiMote Button Pressed
@@ -456,7 +459,7 @@ def LineFollowWebCam(showcam):
                     print "Turn Right: ", SteerRight, cx
                     scrollphat.clear()         # Shutdown Scroll pHat
                     scrollphat.write_string("TrR")
-                    DalekV2Drive.turnForwardLeft(outerturnspeed, innerturnspeed)
+                    DalekV2Drive.spinRight(turnspeed)
 
                 # --------- On Track Routine ----------
                 if cx < 370 and cx > 270:
@@ -472,7 +475,7 @@ def LineFollowWebCam(showcam):
                     print "Turn Left: ", SteerLeft, cx
                     scrollphat.clear()         # Shutdown Scroll pHat
                     scrollphat.write_string("TrL")
-                    DalekV2Drive.turnForwardLeft(innerturnspeed, outerturnspeed)
+                    DalekV2Drive.spinLeft(turnspeed)
  
                 # ------ Show the resulting cropped image
                 if showcam == True:
@@ -513,7 +516,9 @@ def LineFollowPiCam(showcam):
     global camera              # Allow Access to PiCamera Object
     
     cx = 300                   # Go Streight
-  
+    turnspeed = 95
+    speed = 30
+    
     rawCapture = PiRGBArray(camera, size=(hRes, vRes))
     #camera.capture(video_capture,format="bgr")
     time.sleep(0.1)
@@ -596,14 +601,13 @@ def LineFollowPiCam(showcam):
                     cv2.line(crop_img,(270,0),(270,480),(0,0,255),2)
                     cv2.line(crop_img,(370,0),(370,480),(0,0,255),2)
 
-                # --------- Steer Right Routine ----------
                 if cx >= 370:
                     RSteer = cx - 370
                     SteerRight = remap(RSteer, 0, 45, 1, 270)
-                    print "Turn Right: ", SteerRight, cx                    
+                    print "Turn Right: ", SteerRight, cx
                     scrollphat.clear()         # Shutdown Scroll pHat
                     scrollphat.write_string("TrR")
-                    DalekV2Drive.turnForwardLeft(outerturnspeed, innerturnspeed)
+                    DalekV2Drive.spinRight(turnspeed)
 
                 # --------- On Track Routine ----------
                 if cx < 370 and cx > 270:
@@ -612,15 +616,15 @@ def LineFollowPiCam(showcam):
                     scrollphat.write_string("Fw")
                     DalekV2Drive.forward(speed)
 
-                    # --------- Steer Left Routine ----------
+                # --------- Steer Left Routine ----------
                 if cx <= 270:
                     LSteer = 270 - cx
                     SteerLeft = remap(LSteer, 0, 45, 1, 270)
                     print "Turn Left: ", SteerLeft, cx
                     scrollphat.clear()         # Shutdown Scroll pHat
                     scrollphat.write_string("TrL")
-                    DalekV2Drive.turnForwardLeft(innerturnspeed, outerturnspeed)
- 
+                    DalekV2Drive.spinLeft(turnspeed)
+                    
                 # ------ Show the resulting cropped image
                 if showcam == True:
                     cv2.imshow('frame',crop_img)
