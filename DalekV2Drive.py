@@ -80,7 +80,7 @@ def init():
     print 'Set the GPIO to software PWM at ' + str(Frequency) + ' Hertz - Motor BR'
     pwmMotorBRSpeed = GPIO.PWM(pinMotorBRSpeed, Frequency)
 
-    print 'Start the software PWM with a duty cycle of 0 (i.e. not moving) - Moter BR'
+    print 'Start the software PWM with a duty cycle of 0 (i.e. not moving) - Motor BR'
     pwmMotorBRSpeed.start(Stop)
 
     # Setup Motor BL
@@ -92,7 +92,7 @@ def init():
     print 'Set the GPIO to software PWM at ' + str(Frequency) + ' Hertz - Motor BL'
     pwmMotorBLSpeed = GPIO.PWM(pinMotorBLSpeed, Frequency)
 
-    print 'Start the software PWM with a duty cycle of 0 (i.e. not moving) - Moter BL\n'
+    print 'Start the software PWM with a duty cycle of 0 (i.e. not moving) - Motor BL\n'
     pwmMotorBLSpeed.start(Stop)
     
 # cleanup(). Sets all motors off and sets GPIO to standard values
